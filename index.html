@@ -2,74 +2,106 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Te Amo</title>
+  <title>TE AMO</title>
   <style>
     body {
       margin: 0;
       background: black;
-      overflow: hidden;
+      color: white;
       font-family: 'Arial', sans-serif;
-      cursor: pointer;
+      overflow: hidden;
     }
-    .texto {
-      position: absolute;
-      color: #ff4dd2;
-      font-size: 2rem;
-      font-weight: bold;
-      text-shadow: 0 0 10px #ff4dd2, 0 0 20px #ff4dd2;
-      animation: flotar 10s linear forwards;
-      user-select: none;
+
+    h1 {
+      font-size: 4em;
+      color: #ff4f9a;
+      text-align: center;
+      margin-top: 20vh;
+      text-shadow: 0 0 15px #ff4f9a, 0 0 30px #ff4f9a;
+      animation: pulse 2s infinite;
     }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
     .corazon {
       position: absolute;
       width: 20px;
       height: 20px;
-      background: url('https://i.imgur.com/9yGGMqY.png') no-repeat center;
-      background-size: contain;
-      animation: flotarCorazon 12s linear infinite;
-      opacity: 0.7;
+      background: pink;
+      transform: rotate(45deg);
+      animation: flotar 3s ease-out forwards;
     }
-    @keyframes flotar { 0% { transform: translateY(100vh) scale(1); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-100vh) scale(1.5); opacity: 0; } }
-    @keyframes flotarCorazon { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-20vh); opacity: 0; } }
-    audio { display: none; }
+
+    .corazon::before,
+    .corazon::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .corazon::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .corazon::after {
+      top: 0;
+      left: -10px;
+    }
+
+    @keyframes flotar {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-150px) scale(1.5);
+      }
+    }
   </style>
 </head>
-<body onclick="iniciarAudio()">
+<body>
+  <h1>TE AMO</h1>
 
-<audio id="audio" autoplay loop>
-  <source src="butterflies.mp3" type="audio/mpeg">
-  Tu navegador no soporta audio.
-</audio>
+  <audio id="miMusica" loop>
+    <source src="butterflies.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+  </audio>
 
-<script>
-  const frases = ["TE AMO", "TE ADORO"];
-  function crearTexto(x = Math.random() * window.innerWidth, y = Math.random() * window.innerHeight) {
-    const texto = document.createElement("div");
-    texto.className = "texto";
-    texto.textContent = frases[Math.floor(Math.random() * frases.length)];
-    texto.style.left = x + "px";
-    texto.style.top = y + "px";
-    texto.style.fontSize = (Math.random() * 20 + 20) + "px";
-    texto.style.animationDuration = (Math.random() * 5 + 5) + "s";
-    document.body.appendChild(texto);
-    setTimeout(() => texto.remove(), 10000);
-  }
-  setInterval(() => crearTexto(), 300);
-  document.addEventListener("click", e => crearTexto(e.clientX, e.clientY));
-  function crearCorazon() {
-    const c = document.createElement("div");
-    c.className = "corazon";
-    c.style.left = Math.random() * window.innerWidth + "px";
-    c.style.top = window.innerHeight + "px";
-    c.style.animationDuration = (Math.random() * 10 + 10) + "s";
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 15000);
-  }
-  setInterval(crearCorazon, 200);
-  function iniciarAudio() {
-    document.getElementById("audio").play();
-  }
-</script>
+  <script>
+    const musica = document.getElementById('miMusica');
+    let haSonado = false;
 
+    document.addEventListener('click', function (e) {
+      // Sonido después del primer clic
+      if (!haSonado) {
+        musica.play();
+        haSonado = true;
+      }
+
+      // Crear corazón
+      const heart = document.createElement('div');
+      heart.className = 'corazon';
+      heart.style.left = (e.clientX - 10) + 'px';
+      heart.style.top = (e.clientY - 10) + 'px';
+      document.body.appendChild(heart);
+
+      // Eliminar corazón después de 3 segundos
+      setTimeout(() => {
+        heart.remove();
+      }, 3000);
+    });
+  </script>
 </body>
 </html>
